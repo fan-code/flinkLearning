@@ -72,13 +72,13 @@ public class CepLearn01 {
         PatternStream<UserAction> patternStream = CEP.pattern(input, pattern);
 
         //获取click-buy事件消息及超时消息
-        SingleOutputStreamOperator<String> select1 = patternStream.select(overFiveTag, new PatternTimeoutFunction<UserAction, UserAction>() {
+        SingleOutputStreamOperator<String> clickAndBuy = patternStream.select(overFiveTag, new PatternTimeoutFunction<UserAction, UserAction>() {
             @Override
             public UserAction timeout(Map<String, List<UserAction>> pattern, long timeoutTimestamp) throws Exception {
 
                 UserAction click = pattern.get("start").iterator().next();
 //                UserAction buy = pattern.get("middle").iterator().next();
-                System.out.println("click"+click);
+//                System.out.println("click"+click);
 //                System.out.println("buy"+buy);
 
                 return click;
@@ -91,8 +91,8 @@ public class CepLearn01 {
                 return "name:"+ click.name+"--click--"+click.timeStamp+"--buy--"+buy.timeStamp;
             }
         });
-        select1.print();
-        DataStream<UserAction> sideOutput = select1.getSideOutput(overFiveTag);
+        clickAndBuy.print();
+        DataStream<UserAction> sideOutput = clickAndBuy.getSideOutput(overFiveTag);
         sideOutput.print();
 
 //仅获取click-buy事件消息
