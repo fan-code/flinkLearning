@@ -65,15 +65,10 @@ public class HotItems {
 		// 创建 PojoCsvInputFormat
 		PojoCsvInputFormat<UserBehavior> csvInput = new PojoCsvInputFormat<>(filePath, pojoType, fieldOrder);
 
-
-		env
-			// 创建数据源，得到 UserBehavior 类型的 DataStream
-			.createInput(csvInput, pojoType)
-			// 抽取出时间和生成 watermark
+		env.createInput(csvInput, pojoType)
 			.assignTimestampsAndWatermarks(new AscendingTimestampExtractor<UserBehavior>() {
 				@Override
 				public long extractAscendingTimestamp(UserBehavior userBehavior) {
-					// 原始数据单位秒，将其转成毫秒
 					return userBehavior.timestamp * 1000;
 				}
 			})
@@ -86,7 +81,7 @@ public class HotItems {
 				}
 			})
 			.keyBy("itemId")
-			.timeWindow(Time.minutes(60), Time.minutes(5))
+			.timeWindow(Time.seconds(10), Time.minutes(10))
 			.aggregate(new CountAgg(), new WindowResultFunction())
 			.keyBy("windowEnd")
 			.process(new TopNHotItems(3))
@@ -151,7 +146,7 @@ public class HotItems {
 			StringBuilder result = new StringBuilder();
 			result.append("====================================\n");
 			result.append("时间: ").append(new Timestamp(timestamp-1)).append("\n");
-                        for (int i=0; i<allItems.size() && i < topSize; i++) {
+			for (int i=0; i<allItems.size() && i < topSize; i++) {
 				ItemViewCount currentItem = allItems.get(i);
 				// No1:  商品ID=12224  浏览量=2413
 				result.append("No").append(i).append(":")
@@ -221,7 +216,16 @@ public class HotItems {
 			result.viewCount = viewCount;
 			return result;
 		}
-	}
+
+        @Override
+        public String toString() {
+            return "ItemViewCount{" +
+                    "itemId=" + itemId +
+                    ", windowEnd=" + windowEnd +
+                    ", viewCount=" + viewCount +
+                    '}';
+        }
+    }
 
 	/** 用户行为数据结构 **/
 	public static class UserBehavior {
@@ -230,5 +234,16 @@ public class HotItems {
 		public int categoryId;      // 商品类目ID
 		public String behavior;     // 用户行为, 包括("pv", "buy", "cart", "fav")
 		public long timestamp;      // 行为发生的时间戳，单位秒
-	}
+
+        @Override
+        public String toString() {
+            return "UserBehavior{" +
+                    "userId=" + userId +
+                    ", itemId=" + itemId +
+                    ", categoryId=" + categoryId +
+                    ", behavior='" + behavior + '\'' +
+                    ", timestamp=" + timestamp +
+                    '}';
+        }
+    }
 }

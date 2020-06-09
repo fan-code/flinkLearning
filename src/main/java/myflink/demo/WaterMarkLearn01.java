@@ -1,4 +1,4 @@
-package myflink;
+package myflink.demo;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple;

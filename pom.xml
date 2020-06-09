@@ -23,7 +23,8 @@ under the License.
 	<groupId>my-flink-project</groupId>
 	<artifactId>my-flink-project</artifactId>
 	<version>0.1</version>
-	<packaging>jar</packaging>
+
+    <packaging>pom</packaging>
 
 	<name>Flink Quickstart Job</name>
 	<url>http://www.myorganization.org</url>
@@ -55,6 +56,12 @@ under the License.
 		<!-- Apache Flink dependencies -->
 		<!-- These dependencies are provided, because they should not be packaged into the JAR file. -->
 		<dependency>
+			<groupId>org.apache.bahir</groupId>
+			<artifactId>flink-connector-redis_2.11</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-java</artifactId>
 			<version>${flink.version}</version>
@@ -65,6 +72,14 @@ under the License.
 			<artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
 			<version>${flink.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<!-- 使用cep需要引入该jar包，
+    scala语言编写要导入 artifactId前缀为 flink-cep-scala -->
+		<!-- https://mvnrepository.com/artifact/org.apache.flink/flink-cep -->
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-cep_2.11</artifactId>
+			<version>${flink.version}</version>
 		</dependency>
 
 		<!-- Add connector dependencies here. They must be in the default scope (compile). -->
