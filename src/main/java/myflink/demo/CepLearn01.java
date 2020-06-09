@@ -76,12 +76,12 @@ public class CepLearn01 {
             @Override
             public UserAction timeout(Map<String, List<UserAction>> pattern, long timeoutTimestamp) throws Exception {
 
-//                UserAction click = pattern.get("start").iterator().next();
-                UserAction buy = pattern.get("middle").iterator().next();
-//                System.out.println("click"+click);
-                System.out.println("buy"+buy);
+                UserAction click = pattern.get("start").iterator().next();
+//                UserAction buy = pattern.get("middle").iterator().next();
+                System.out.println("click"+click);
+//                System.out.println("buy"+buy);
 
-                return buy;
+                return click;
         }
         }, new PatternSelectFunction<UserAction, String>() {
             @Override
