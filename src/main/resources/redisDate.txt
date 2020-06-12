@@ -1,0 +1,4 @@
+sensor_1,0.1
+sensor_2,0.2
+sensor_3,0.3
+sensor_4,0.4
