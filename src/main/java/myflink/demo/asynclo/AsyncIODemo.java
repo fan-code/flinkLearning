@@ -1,4 +1,4 @@
-package myflink.demo;
+package myflink.demo.asynclo;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.AsyncDataStream;
